@@ -38,7 +38,7 @@
       type: 'POST',
       url: '/saveimage',
       data: {
-        'image': signaturePad.toDataURL('image/svg+xml')
+        'image': signaturePad.toDataURL()
       },
       success: function (res, status) {
         liff.getProfile().then(function (profile) {
