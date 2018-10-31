@@ -38,10 +38,10 @@ def saveimage():
 
     original = Image.open(os.path.join(dir_name, '{}.svg'.format(img_name)))
     # Needs simple validation of format for security since Pillow supports various type of Images
-    if(original.format != 'SVG'):
+    if(original.format != 'svg+xml'):
         return make_response('Unsupported image type.', 400)
 
     original.thumbnail((240, 240), Image.ANTIALIAS)
-    original.save(os.path.join(dir_name, '{}_240.svg'.format(img_name)), 'SVG')
+    original.save(os.path.join(dir_name, '{}_240.svg'.format(img_name)), 'svg+xml')
 
     return make_response(img_name, 200)
