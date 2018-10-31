@@ -44,4 +44,4 @@ def saveimage():
     original.thumbnail((240, 240), Image.ANTIALIAS)
     original.save(os.path.join(dir_name, '{}_240.jpg'.format(img_name)), 'JPEG')
 
-    return make_response(img_name, 200,original.format)
+    return make_response(img_name, 200)
