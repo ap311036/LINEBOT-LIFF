@@ -24,7 +24,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   var signaturePad = new SignaturePad(document.getElementById('canvas'), {
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgb(255,255,255)'
   });
 
   $(window).on('load', function () {
@@ -41,12 +41,13 @@
         'image': signaturePad.toDataURL()
       },
       success: function (res, status) {
+        alert()
         liff.getProfile().then(function (profile) {
           liff.sendMessages([
             {
               type: 'image',
-              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.svg',
-              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.svg'
+              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.jpg',
+              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.jpg'
             },
             {
               type: 'text',
