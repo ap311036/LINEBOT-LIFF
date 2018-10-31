@@ -38,10 +38,10 @@ def saveimage():
 
     original = Image.open(os.path.join(dir_name, '{}.png'.format(img_name)))
     # Needs simple validation of format for security since Pillow supports various type of Images
-    if(original.format != 'PNG'):
+    if(original.format != 'JPEG'):
         return make_response('Unsupported image type.', 400)
 
     original.thumbnail((240, 240), Image.ANTIALIAS)
-    original.save(os.path.join(dir_name, '{}_240.png'.format(img_name)), 'PNG')
+    original.save(os.path.join(dir_name, '{}_240.png'.format(img_name)), 'JPEG')
 
     return make_response(img_name, 200)
