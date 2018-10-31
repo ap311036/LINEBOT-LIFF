@@ -16,6 +16,7 @@
       canvas.setAttribute('width', $('.container').width());
       canvas.setAttribute('height', window.innerHeight - $('#btn').outerHeight() - 10);
       signaturePad.clear();
+      liff.init(function (data) {});
     });
   </script> <!-- 追加 -->
   <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
