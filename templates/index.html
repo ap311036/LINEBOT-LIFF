@@ -38,15 +38,15 @@
       type: 'POST',
       url: '/saveimage',
       data: {
-        'image': signaturePad.toDataURL('image/jpeg')
+        'image': signaturePad.toDataURL('image/svg+xml')
       },
       success: function (res, status) {
         liff.getProfile().then(function (profile) {
           liff.sendMessages([
             {
               type: 'image',
-              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.jpg',
-              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.jpg'
+              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.svg',
+              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.svg'
             },
             {
               type: 'text',

@@ -1,8 +1,8 @@
 {% extends "bootstrap/base.html" %}
 
 {%- block metas %}
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 {%- endblock metas %}
 <!--追加ここまで-->
 {% block title %}Paint Sample{% endblock %}
@@ -24,7 +24,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   var signaturePad = new SignaturePad(document.getElementById('canvas'), {
-    backgroundColor: 'rgb(255,255,255)'
+    backgroundColor: 'rgba(0,0,0,0)'
   });
 
   $(window).on('load', function () {
@@ -38,15 +38,15 @@
       type: 'POST',
       url: '/saveimage',
       data: {
-        'image': signaturePad.toDataURL('image/jpeg')
+        'image': signaturePad.toDataURL('image/svg+xml')
       },
       success: function (res, status) {
         liff.getProfile().then(function (profile) {
           liff.sendMessages([
             {
               type: 'image',
-              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.jpg',
-              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.jpg'
+              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.svg',
+              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.svg'
             },
             {
               type: 'text',
