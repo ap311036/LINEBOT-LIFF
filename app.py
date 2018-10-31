@@ -20,7 +20,7 @@ def do_get():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(port = os.environ.get('PORT', 8000))
+    app.run()
 
 # 追加
 @app.route('/saveimage', methods=['POST'])
