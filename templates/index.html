@@ -1,71 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+{% extends "bootstrap/base.html" %}
 
-  <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script>
-  </script>
-</head>
-<body>
-  <div class="container">
-    <canvas id="canvas"></canvas>
-    <button id="btn" type="button" class="btn btn-primary btn-block">Share</button>
-  </div>
-</body>
-  <script>
-    var signaturePad = new SignaturePad(document.getElementById('canvas'), {
-      backgroundColor: 'rgb(255,255,255)'
-    });
+{%- block metas %}
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+{%- endblock metas %}
+<!--追加ここまで-->
+{% block title %}Paint Sample{% endblock %}
 
-    $(window).on('load', function () {
-      canvas.setAttribute('width', $('.container').width());
-      canvas.setAttribute('height', window.innerHeight - $('#btn').outerHeight() - 10);
-      signaturePad.clear();
-    });
-    function download(dataURL, filename) {
-      if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1) {
-        window.open(dataURL);
-      } else {
-        var blob = dataURLToBlob(dataURL);
-        var url = window.URL.createObjectURL(blob);
+<!--追加-->
+{% block content %}
+<div class="container">
+  <canvas id="canvas"></canvas>
+  <button id="btn" type="button" class="btn btn-primary btn-block">Share</button>
+</div>
+{% endblock %}
+<!--追加ここまで-->
+{% block scripts %}
+{{super()}}
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+<script>
+</script> <!-- 追加 -->
+<script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  var signaturePad = new SignaturePad(document.getElementById('canvas'), {
+    backgroundColor: 'rgb(255,255,255)'
+  });
 
-        var a = document.createElement("a");
-        a.style = "display: none";
-        a.href = url;
-        a.download = filename;
-
-        document.body.appendChild(a);
-        a.click();
-
-        window.URL.revokeObjectURL(url);
+  $(window).on('load', function () {
+    canvas.setAttribute('width', $('.container').width());
+    canvas.setAttribute('height', window.innerHeight - $('#btn').outerHeight() - 10);
+    signaturePad.clear();
+    liff.init(function (data) { });
+  });
+  $('#btn').on('click', function () {
+    $.ajax({
+      type: 'POST',
+      url: '/saveimage',
+      data: {
+        'image': signaturePad.toDataURL('image/jpeg')
+      },
+      success: function (res, status) {
+        liff.getProfile().then(function (profile) {
+          liff.sendMessages([
+            {
+              type: 'image',
+              originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.jpg',
+              previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.jpg'
+            },
+            {
+              type: 'text',
+              text: 'From:' + profile.displayName
+            }
+          ]).then(function () {
+            liff.closeWindow();
+          }).catch(function (error) {
+            window.alert('Error sending message: ' + error.message);
+          });
+        }).catch(function (error) {
+          window.alert("Error getting profile: " + error.message);
+        });
+      },
+      error: function (res) {
+        window.alert('Error saving image: ' + res.status);
+      },
+      complete: function (data) {
       }
-    }
-    function dataURLToBlob(dataURL) {
-        // Code taken from https://github.com/ebidel/filer.js
-        var parts = dataURL.split(';base64,');
-        var contentType = parts[0].split(":")[1];
-        var raw = window.atob(parts[1]);
-        var rawLength = raw.length;
-        var uInt8Array = new Uint8Array(rawLength);
-
-        for (var i = 0; i < rawLength; ++i) {
-          uInt8Array[i] = raw.charCodeAt(i);
-        }
-
-        return new Blob([uInt8Array], { type: contentType });
-    }
-
-    $('#btn').on('click', function () {
-      var dataURL = signaturePad.toDataURL("image/jpeg");
-      download(dataURL, "signature.jpg");
     });
-  </script> <!-- 追加 -->
-</html>
+  });
+</script>
+{% endblock %}
