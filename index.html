@@ -1,70 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.0/dist/signature_pad.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.0/dist/signature_pad.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
-
 <body>
-    <div class="container">
-        <canvas id="canvas"></canvas>
-        <button id="btn" type="button" class="btn btn-primary btn-block">Share</button>
-    </div>
+	<div class="container">
+	  <canvas id="canvas"></canvas>
+	  <button id="btn" type="button" class="btn btn-primary btn-block">Share</button>
+	</div>
 </body>
-<script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-var signaturePad = new SignaturePad(document.getElementById('canvas'), {
-    backgroundColor: 'rgba(255, 255, 255, 0)',
-    penColor: 'rgb(0, 0, 0)'
-});
+	<script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		var signaturePad = new SignaturePad(document.getElementById('canvas'), {
+		  backgroundColor: 'rgba(255, 255, 255, 0)',
+		  penColor: 'rgb(0, 0, 0)'
+		});
 
-$(window).on('load', function() {
-    canvas.setAttribute('width', $('.container').width());
-    canvas.setAttribute('height', window.innerHeight - $('#btn').outerHeight() - 10);
-    signaturePad.clear();
-    // 追加
-    liff.init(function(data) {});
-});
-$('#btn').on('click', function() {
-    $.ajax({
-        type: 'POST',
-        url: '/',
-        data: {
-            'image': signaturePad.toDataURL('image/jpeg')
-        },
-        success: function(res, status) {
-            alert(res);
-            liff.getProfile().then(function(profile) {
-                liff.sendMessages([{
-                        type: 'image',
-                        originalContentUrl: 'https://' + document.domain + '/' + res + '.jpg',
-                        previewImageUrl: 'https://' + document.domain + '/' + res + '_240.jpg'
-                    },
-                    {
-                        type: 'text',
-                        text: 'From:' + profile.displayName
-                    }
-                ]).then(function() {
-                    liff.closeWindow();
-                }).catch(function(error) {
-                    window.alert('Error sending message: ' + error.message);
-                });
-            }).catch(function(error) {
-                window.alert("Error getting profile: " + error.message);
-            });
-        },
-        error: function(res) {
-            window.alert('Error saving image: ' + res.status);
-        },
-        complete: function(data) {}
-    });
-});
-</script>
-
+		$(window).on('load', function(){
+		  canvas.setAttribute('width', $('.container').width());
+		  canvas.setAttribute('height', window.innerHeight - $('#btn').outerHeight() - 10);
+		  signaturePad.clear();
+		  // 追加
+		  liff.init(function (data) {});
+		});
+		$('#btn').on('click', function() {
+		  $.ajax({
+		    type: 'POST',
+		    url: '/saveimage',
+		    data: {
+		      'image': signaturePad.toDataURL('image/jpeg')
+		    },
+		    success: function (res, status) {
+		      liff.getProfile().then(function (profile) {
+		        liff.sendMessages([
+		          {
+		            type: 'image',
+		            originalContentUrl: 'https://' + document.domain + '/imgs/' + res + '.jpg',
+		            previewImageUrl: 'https://' + document.domain + '/imgs/' + res + '_240.jpg'
+		          },
+		          {
+		            type: 'text',
+		            text: 'From:' + profile.displayName
+		          }
+		        ]).then(function () {
+		          liff.closeWindow();
+		        }).catch(function (error) {
+		          window.alert('Error sending message: ' + error.message);
+		        });
+		      }).catch(function (error) {
+		          window.alert("Error getting profile: " + error.message);
+		      });
+		    },
+		    error: function (res) {
+		      window.alert('Error saving image: ' + res.status);
+		    },
+		    complete: function(data) {
+		    }
+		  });
+		});
+	</script>
 </html>
