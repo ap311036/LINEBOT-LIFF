@@ -38,7 +38,7 @@
       type: 'POST',
       url: '/saveimage',
       data: {
-        'image': signaturePad.toDataURL()
+        'image': signaturePad.toDataURL('image/jpeg')
       },
       success: function (res, status) {
         alert('')
