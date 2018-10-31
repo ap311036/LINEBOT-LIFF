@@ -19,6 +19,17 @@
       liff.init(function (data) {});
     });
   </script> <!-- 追加 -->
+
+{% endblock %}
+<!--追加ここまで-->
+{% block title %}Paint Sample{% endblock %}
+
+<!--追加-->
+{% block content %}
+<div class="container">
+  <canvas id="canvas"></canvas>
+  <button id="btn" type="button" class="btn btn-primary btn-block">Share</button>
+</div>
   <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
@@ -58,15 +69,5 @@
       });
     });
   </script>
-{% endblock %}
-<!--追加ここまで-->
-{% block title %}Paint Sample{% endblock %}
-
-<!--追加-->
-{% block content %}
-<div class="container">
-  <canvas id="canvas"></canvas>
-  <button id="btn" type="button" class="btn btn-primary btn-block">Share</button>
-</div>
 {% endblock %}
 <!--追加ここまで-->
