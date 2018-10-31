@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, make_response
 from flask_bootstrap import Bootstrap
-from io import BytesIO
+
 import os
 import uuid
 import base64
@@ -34,7 +34,7 @@ def saveimage():
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
     with open(os.path.join(dir_name, '{}.png'.format(img_name)), 'wb') as img:
-        img.write(BytesIO(base64.b64decode(event['image'].split(",")[1])))
+        img.write(base64.b64decode(event['image'].split(",")[1]))
 
     original = Image.open(os.path.join(dir_name, '{}.png'.format(img_name)))
     # Needs simple validation of format for security since Pillow supports various type of Images
