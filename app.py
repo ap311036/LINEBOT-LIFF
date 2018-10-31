@@ -15,12 +15,12 @@ bootstrap = Bootstrap(app)
 
 @app.route('/')
 def do_get():
-    return render_template('templates/index.html')
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(port=5000)
+    app.run(port=9998)
 
 # 追加
 @app.route('/saveimage', methods=['POST'])
